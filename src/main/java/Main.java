@@ -17,6 +17,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        int windowWidth = 800;
+        int windwowHeight = 600;
 
         stage.setTitle( "Ez clap" );
 
@@ -24,17 +26,19 @@ public class Main extends Application {
         Scene theScene = new Scene( root );
         stage.setScene( theScene );
 
-        Canvas canvas = new Canvas( 800, 600 );
+        Canvas canvas = new Canvas(windowWidth, windwowHeight);
         root.getChildren().add( canvas );
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Image pilota = new Image("Assets/ardillaCen.png");
+        Image centro = new Image("ardillaCen160.png");
 
         new AnimationTimer() {
             @Override
             public void handle(long l) {
-                gc.drawImage(pilota, 50, 50);
+                gc.clearRect(0, 0, 800, 600);
+
+                gc.drawImage(centro, windowWidth/2.0, windwowHeight/2.0);
             }
         }.start();
 
