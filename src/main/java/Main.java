@@ -26,6 +26,6 @@ public class Main extends Application {
         root.getChildren().add( canvas );
 
         stage.show();
-        
+
     }
 }
