@@ -7,7 +7,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+
 public class Main extends Application {
+    double x;
+
 
     public static void main(String[] args)
     {
@@ -29,16 +32,25 @@ public class Main extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Image pilota = new Image("Assets/ardillaCen.png");
+        final long startNanoTime = System.nanoTime();
+
+        Gallina gallina = new Gallina();
+        Image[] imageArray = new Image[2];
+        imageArray[0] = new Image("gallina_0.png");
+        imageArray[1] = new Image("gallina_1.png");
+        gallina.frames = imageArray;
+        gallina.duration = 0.100;
 
         new AnimationTimer() {
             @Override
             public void handle(long l) {
-                gc.drawImage(pilota, 50, 50);
+                gc.clearRect(0, 0, 800, 600);
+                double t = (l - startNanoTime) / 1000000000.0;
+                gc.drawImage( gallina.getFrame(t), x, 0);
+                x+=0.5;
             }
         }.start();
 
         stage.show();
-
     }
 }
