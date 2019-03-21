@@ -38,6 +38,7 @@ public class Main extends Application {
         Image[] imageArray = new Image[2];
         imageArray[0] = new Image("gallina_0.png");
         imageArray[1] = new Image("gallina_1.png");
+
         gallina.frames = imageArray;
         gallina.duration = 0.100;
 
