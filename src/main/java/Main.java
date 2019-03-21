@@ -37,13 +37,7 @@ public class Main extends Application {
 
         final long startNanoTime = System.nanoTime();
 
-        Gallina gallina = new Gallina();
-        Image[] imageArray = new Image[2];
-        imageArray[0] = new Image("gallina_2.png");
-        imageArray[1] = new Image("gallina_1.png");
-
-        gallina.frames = imageArray;
-        gallina.duration = 0.100;
+        Gallina gallina = Gallina.CreateGallina();
 
         Image centro = new Image("ardillaCen160.png");
         double imgWidth = centro.getWidth();
@@ -109,21 +103,24 @@ public class Main extends Application {
                     yMirilla = posicionYArdilla;
                     resetearMirillas = false;
                 }
-                if(!Fgallina){
-                    gc.drawImage( gallina.getFrame(t), x, yGallina);
-                    x+=0.5;
-                    if(x > winwWidth){
-                        Fgallina = true;
-                    }
-                }else{
-                    x=0;
-                    numrand = imgHeight +(Math.random() * ((minrand - imgHeight)+1));
-                    gc.drawImage( gallina.getFrame(t), x, yGallina);
-                    Fgallina = false;
-                }
+                checkGallina(t, gc, gallina, imgHeight);
             }
         }.start();
-
         stage.show();
+    }
+
+    private void checkGallina(double t, GraphicsContext gc, Gallina gallina, double imgHeight) {
+        if(!Fgallina){
+            gc.drawImage( gallina.getFrame(t), x, yGallina);
+            x+=0.5;
+            if(x > winwWidth){
+                Fgallina = true;
+            }
+        }else{
+            x=0;
+            numrand = imgHeight +(Math.random() * ((minrand - imgHeight)+1));
+            gc.drawImage( gallina.getFrame(t), x, yGallina);
+            Fgallina = false;
+        }
     }
 }
