@@ -8,12 +8,17 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Main extends Application {
     double x;
+    double y;
+    private double numrand;
     private int winwWidth = 800;
     private int winHeight = 600;
     private Canvas canvas = new Canvas(winwWidth, winHeight);
+    boolean Fgallina = false;
+    double minrand;
 
     public static void main(String[] args)
     {
@@ -43,12 +48,19 @@ public class Main extends Application {
         gallina.frames = imageArray;
         gallina.duration = 0.100;
 
+
+
         Image centro = new Image("ardillaCen160.png");
         double imgWidth = centro.getWidth();
         double imgHeight = centro.getHeight();
 
         Image izq = new Image("ardillaIzq160.png");
         Image der = new Image("ardillaDer160.png");
+
+        minrand =600 - imgHeight;
+
+
+        numrand = imgHeight +(Math.random() * ((minrand - imgHeight)+1));
 
         double posicionXArdilla = (winwWidth / 2.0) - (imgWidth / 2.0);
         double posicionYArdilla = winHeight - imgHeight;
@@ -82,9 +94,22 @@ public class Main extends Application {
                 else
                     gc.drawImage(centro, posicionXArdilla, posicionYArdilla);
 
+
                 double t = (l - startNanoTime) / 1000000000.0;
-                gc.drawImage( gallina.getFrame(t), x, 0);
-                x+=0.5;
+                y = (numrand-gallina.getFrame(t).getHeight());
+                if(!Fgallina){
+                    gc.drawImage( gallina.getFrame(t), x, y);
+                    x+=0.8;
+                    if(x > winwWidth){
+                        Fgallina = true;
+                    }
+                }else{
+                    x=0;
+                    numrand = imgHeight +(Math.random() * ((minrand - imgHeight)+1));
+                    gc.drawImage( gallina.getFrame(t), x, y);
+                    Fgallina = false;
+                }
+
             }
         }.start();
 
