@@ -8,17 +8,14 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Main extends Application {
-    double x;
-    double y;
-    private double numrand;
+    private double x, yGallina, yMirilla, minrand, numrand;
     private int winwWidth = 800;
     private int winHeight = 600;
     private Canvas canvas = new Canvas(winwWidth, winHeight);
     boolean Fgallina = false;
-    double minrand;
+    private boolean resetearMirillas;
 
     public static void main(String[] args)
     {
@@ -48,22 +45,24 @@ public class Main extends Application {
         gallina.frames = imageArray;
         gallina.duration = 0.100;
 
-
-
         Image centro = new Image("ardillaCen160.png");
         double imgWidth = centro.getWidth();
         double imgHeight = centro.getHeight();
 
         Image izq = new Image("ardillaIzq160.png");
         Image der = new Image("ardillaDer160.png");
+        Image mirIzq = new Image("mira160.png");
+        Image mirDer = new Image("mira160.png");
 
-        minrand =600 - imgHeight;
-
-
+        minrand = 600 - imgHeight;
         numrand = imgHeight +(Math.random() * ((minrand - imgHeight)+1));
 
         double posicionXArdilla = (winwWidth / 2.0) - (imgWidth / 2.0);
         double posicionYArdilla = winHeight - imgHeight;
+        double posicionMirIzq = (winwWidth / 2.0) - (mirIzq.getWidth() * 1.75);
+        double posicionMirDer = (winwWidth / 2.0) + (mirDer.getWidth() * 0.7);
+
+        yMirilla = posicionYArdilla;
 
         ArrayList<String> input = new ArrayList<String>();
 
@@ -86,30 +85,42 @@ public class Main extends Application {
             @Override
             public void handle(long l) {
                 gc.clearRect(0, 0, 800, 600);
+                gc.drawImage(mirIzq, posicionMirIzq, yMirilla);
+                gc.drawImage(mirDer, posicionMirDer, yMirilla);
 
-                if (input.contains("LEFT"))
+                if (input.contains("LEFT")) {
                     gc.drawImage(izq, posicionXArdilla, posicionYArdilla);
-                else if (input.contains("RIGHT"))
+                    resetearMirillas = true;
+                }
+                else if (input.contains("RIGHT")) {
                     gc.drawImage(der, posicionXArdilla, posicionYArdilla);
-                else
+                    resetearMirillas = true;
+                }
+                else {
                     gc.drawImage(centro, posicionXArdilla, posicionYArdilla);
-
+                }
 
                 double t = (l - startNanoTime) / 1000000000.0;
-                y = (numrand-gallina.getFrame(t).getHeight());
+
+                yMirilla -= 0.8;
+                yGallina = (numrand-gallina.getFrame(t).getHeight());
+
+                if (yMirilla < (0 -mirDer.getHeight()) || resetearMirillas) {
+                    yMirilla = posicionYArdilla;
+                    resetearMirillas = false;
+                }
                 if(!Fgallina){
-                    gc.drawImage( gallina.getFrame(t), x, y);
-                    x+=0.8;
+                    gc.drawImage( gallina.getFrame(t), x, yGallina);
+                    x+=0.5;
                     if(x > winwWidth){
                         Fgallina = true;
                     }
                 }else{
                     x=0;
                     numrand = imgHeight +(Math.random() * ((minrand - imgHeight)+1));
-                    gc.drawImage( gallina.getFrame(t), x, y);
+                    gc.drawImage( gallina.getFrame(t), x, yGallina);
                     Fgallina = false;
                 }
-
             }
         }.start();
 
