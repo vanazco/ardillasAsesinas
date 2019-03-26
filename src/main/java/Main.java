@@ -10,11 +10,11 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class Main extends Application {
-    private double x, yGallina, yMirilla, minrand, numrand;
+    private double yMirilla;
     private int winwWidth = 800;
     private int winHeight = 600;
     private Canvas canvas = new Canvas(winwWidth, winHeight);
-    boolean Fgallina = false;
+
     private boolean resetearMirillas;
 
     public static void main(String[] args)
@@ -37,7 +37,9 @@ public class Main extends Application {
 
         final long startNanoTime = System.nanoTime();
 
+        //Gallinas
         Gallina gallina = Gallina.CreateGallina();
+        Gallina gallina1 = Gallina.CreateGallina();
 
         Image centro = new Image("ardillaCen160.png");
         double imgWidth = centro.getWidth();
@@ -48,8 +50,12 @@ public class Main extends Application {
         Image mirIzq = new Image("mira160.png");
         Image mirDer = new Image("mira160.png");
 
-        minrand = 600 - imgHeight;
-        numrand = imgHeight +(Math.random() * ((minrand - imgHeight)+1));
+        //Min del rand para todas las gallinas
+        gallina.minrand = 600 - imgHeight;
+
+        //Randoms de las gallinas
+        gallina.numrand = imgHeight +(Math.random() * ((gallina.minrand - imgHeight)+1));
+        gallina1.numrand = imgHeight +(Math.random() * ((gallina.minrand - imgHeight)+1));
 
         double posicionXArdilla = (winwWidth / 2.0) - (imgWidth / 2.0);
         double posicionYArdilla = winHeight - imgHeight;
@@ -97,30 +103,21 @@ public class Main extends Application {
                 double t = (l - startNanoTime) / 1000000000.0;
 
                 yMirilla -= 0.8;
-                yGallina = (numrand-gallina.getFrame(t).getHeight());
+
+                //Calcular la posicion de la gallina en la que sale
+                gallina.yGallina = (gallina.numrand-gallina.getFrame(t).getHeight());
+                gallina1.yGallina = (gallina1.numrand-gallina1.getFrame(t).getHeight());
 
                 if (yMirilla < (0 -mirDer.getHeight()) || resetearMirillas) {
                     yMirilla = posicionYArdilla;
                     resetearMirillas = false;
                 }
-                checkGallina(t, gc, gallina, imgHeight);
+                //Dibujar gallina
+                gallina.checkGallina(t, gc, gallina, imgHeight);
+                gallina1.checkGallina(t,gc, gallina1, imgHeight);
             }
         }.start();
         stage.show();
     }
 
-    private void checkGallina(double t, GraphicsContext gc, Gallina gallina, double imgHeight) {
-        if(!Fgallina){
-            gc.drawImage( gallina.getFrame(t), x, yGallina);
-            x+=0.5;
-            if(x > winwWidth){
-                Fgallina = true;
-            }
-        }else{
-            x=0;
-            numrand = imgHeight +(Math.random() * ((minrand - imgHeight)+1));
-            gc.drawImage( gallina.getFrame(t), x, yGallina);
-            Fgallina = false;
-        }
-    }
 }
