@@ -14,7 +14,7 @@ public class Main extends Application {
     private int winwWidth = 800;
     private int winHeight = 600;
     private Canvas canvas = new Canvas(winwWidth, winHeight);
-
+    private boolean Fgallina = false;
     private boolean resetearMirillas;
 
     public static void main(String[] args)
@@ -35,36 +35,32 @@ public class Main extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        Ardilla ardilla = new Ardilla();
+        ardilla.cargarArdilla();
+
         final long startNanoTime = System.nanoTime();
 
         //Gallinas
         Gallina gallina = Gallina.CreateGallina();
         Gallina gallina1 = Gallina.CreateGallina();
+        gallina.duration = 0.100;
 
-        Image centro = new Image("ardillaCen160.png");
-        double imgWidth = centro.getWidth();
-        double imgHeight = centro.getHeight();
-
-        Image izq = new Image("ardillaIzq160.png");
-        Image der = new Image("ardillaDer160.png");
         Image mirIzq = new Image("mira160.png");
         Image mirDer = new Image("mira160.png");
 
         //Min del rand para todas las gallinas
-        gallina.minrand = 600 - imgHeight;
+        gallina.minrand = 600 - ardilla.getHeight();
 
         //Randoms de las gallinas
-        gallina.numrand = imgHeight +(Math.random() * ((gallina.minrand - imgHeight)+1));
-        gallina1.numrand = imgHeight +(Math.random() * ((gallina.minrand - imgHeight)+1));
+        gallina.numrand = ardilla.getHeight() +(Math.random() * ((gallina.minrand - ardilla.getHeight())+1));
+        gallina1.numrand = ardilla.getHeight() +(Math.random() * ((gallina.minrand - ardilla.getHeight())+1));
 
-        double posicionXArdilla = (winwWidth / 2.0) - (imgWidth / 2.0);
-        double posicionYArdilla = winHeight - imgHeight;
         double posicionMirIzq = (winwWidth / 2.0) - (mirIzq.getWidth() * 1.75);
         double posicionMirDer = (winwWidth / 2.0) + (mirDer.getWidth() * 0.7);
 
-        yMirilla = posicionYArdilla;
+        yMirilla = ardilla.getX();
 
-        ArrayList<String> input = new ArrayList<String>();
+        ArrayList<String> input = new ArrayList<>();
 
         theScene.setOnKeyPressed(
                 e -> {
@@ -72,13 +68,13 @@ public class Main extends Application {
 
                     // only add once... prevent duplicates
                     if ( !input.contains(code) )
-                        input.add( code );
+                        input.add(code);
                 });
 
         theScene.setOnKeyReleased(
                 e -> {
                     String code = e.getCode().toString();
-                    input.remove( code );
+                    input.remove(code);
                 });
 
         new AnimationTimer() {
@@ -88,17 +84,7 @@ public class Main extends Application {
                 gc.drawImage(mirIzq, posicionMirIzq, yMirilla);
                 gc.drawImage(mirDer, posicionMirDer, yMirilla);
 
-                if (input.contains("LEFT")) {
-                    gc.drawImage(izq, posicionXArdilla, posicionYArdilla);
-                    resetearMirillas = true;
-                }
-                else if (input.contains("RIGHT")) {
-                    gc.drawImage(der, posicionXArdilla, posicionYArdilla);
-                    resetearMirillas = true;
-                }
-                else {
-                    gc.drawImage(centro, posicionXArdilla, posicionYArdilla);
-                }
+                resetearMirillas = ardilla.setImage(input, gc);
 
                 double t = (l - startNanoTime) / 1000000000.0;
 
@@ -109,15 +95,15 @@ public class Main extends Application {
                 gallina1.yGallina = (gallina1.numrand-gallina1.getFrame(t).getHeight());
 
                 if (yMirilla < (0 -mirDer.getHeight()) || resetearMirillas) {
-                    yMirilla = posicionYArdilla;
+                    yMirilla = ardilla.getY();
                     resetearMirillas = false;
                 }
                 //Dibujar gallina
-                gallina.checkGallina(t, gc, gallina, imgHeight);
-                gallina1.checkGallina(t,gc, gallina1, imgHeight);
+                gallina.checkGallina(t, gc, gallina, ardilla.getHeight());
+                gallina1.checkGallina(t,gc, gallina1, ardilla.getHeight());
             }
         }.start();
+
         stage.show();
     }
-
 }
