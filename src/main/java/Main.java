@@ -1,12 +1,16 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class Main extends Application {
@@ -17,14 +21,10 @@ public class Main extends Application {
     private Canvas canvas = new Canvas(winwWidth, winHeight);
     private boolean resetearMirillas;
 
-
-
-
     public static void main(String[] args)
     {
         launch(args);
     }
-
 
     @Override
     public void start(Stage stage) {
@@ -77,13 +77,17 @@ public class Main extends Application {
         theScene.setOnKeyReleased(
                 e -> {
                     String code = e.getCode().toString();
-                    ardilla.setMuni(1);
+
+                    if (code.contains("LEFT") || code.contains("RIGHT"))
+                        ardilla.setMuni(1);
+
                     input.remove(code);
                 });
 
         new AnimationTimer() {
             @Override
             public void handle(long l) {
+                double t = (l - startNanoTime) / 1000000000.0;
                 gc.clearRect(0, 0, 800, 600);
                 //Dibujar fondo
                 gc.drawImage(fondo,0,0);
@@ -99,8 +103,6 @@ public class Main extends Application {
 
                 resetearMirillas = ardilla.setImage(input, gc);
 
-                double t = (l - startNanoTime) / 1000000000.0;
-
                 yMirilla -= 0.8;
 
                 //Calcular la posicion de la gallina en la que sale
@@ -111,6 +113,7 @@ public class Main extends Application {
                     yMirilla = ardilla.getY();
                     resetearMirillas = false;
                 }
+
                 //Dibujar gallina
                 gallina.checkGallina(t, gc, gallina, ardilla.getHeight(), false);
                 gallina1.checkGallina(t,gc, gallina1, ardilla.getHeight(), true);
