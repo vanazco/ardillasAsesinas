@@ -9,7 +9,7 @@ class Ardilla {
     int muni = 20;
     int points = 0;
     int vida = 3;
-    boolean restarMuni = false;
+
 
 
     double getWidth() {
