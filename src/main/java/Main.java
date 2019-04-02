@@ -10,12 +10,15 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class Main extends Application {
+    private final Info info = new Info();
     private double yMirilla;
     private int winwWidth = 800;
     private int winHeight = 600;
     private Canvas canvas = new Canvas(winwWidth, winHeight);
-    private boolean Fgallina = false;
     private boolean resetearMirillas;
+
+
+
 
     public static void main(String[] args)
     {
@@ -43,17 +46,14 @@ public class Main extends Application {
         //Gallinas
         Gallina gallina = Gallina.CreateGallina();
         Gallina gallina1 = Gallina.CreateGallina();
-        gallina.duration = 0.100;
 
         Image mirIzq = new Image("mira160.png");
         Image mirDer = new Image("mira160.png");
 
         //Min del rand para todas las gallinas
         gallina.minrand = 600 - ardilla.getHeight();
+        gallina1.minrand = 600 - ardilla.getHeight();
 
-        //Randoms de las gallinas
-        gallina.numrand = ardilla.getHeight() +(Math.random() * ((gallina.minrand - ardilla.getHeight())+1));
-        gallina1.numrand = ardilla.getHeight() +(Math.random() * ((gallina.minrand - ardilla.getHeight())+1));
 
         double posicionMirIzq = (winwWidth / 2.0) - (mirIzq.getWidth() * 1.75);
         double posicionMirDer = (winwWidth / 2.0) + (mirDer.getWidth() * 0.7);
@@ -61,6 +61,9 @@ public class Main extends Application {
         yMirilla = ardilla.getX();
 
         ArrayList<String> input = new ArrayList<>();
+
+        //Poner fondo
+        Image fondo = new Image("fondo.jpg",800,600,false,false);
 
         theScene.setOnKeyPressed(
                 e -> {
@@ -74,6 +77,7 @@ public class Main extends Application {
         theScene.setOnKeyReleased(
                 e -> {
                     String code = e.getCode().toString();
+                    ardilla.setMuni(1);
                     input.remove(code);
                 });
 
@@ -81,6 +85,15 @@ public class Main extends Application {
             @Override
             public void handle(long l) {
                 gc.clearRect(0, 0, 800, 600);
+                //Dibujar fondo
+                gc.drawImage(fondo,0,0);
+                //Dibujar puntuacion
+                info.setText(gc, "PUNTUACION: ", ardilla.points, 10, 20);
+                //Dibujar municion
+                info.setText(gc, "MUNICION: ", ardilla.muni, ardilla.getWidth() * 4, 580);
+                //Dibujar vida
+                info.setText(gc, "VIDAS: ", ardilla.vida, 700, 20);
+
                 gc.drawImage(mirIzq, posicionMirIzq, yMirilla);
                 gc.drawImage(mirDer, posicionMirDer, yMirilla);
 
@@ -91,16 +104,17 @@ public class Main extends Application {
                 yMirilla -= 0.8;
 
                 //Calcular la posicion de la gallina en la que sale
-                gallina.yGallina = (gallina.numrand-gallina.getFrame(t).getHeight());
-                gallina1.yGallina = (gallina1.numrand-gallina1.getFrame(t).getHeight());
+                gallina.y = (gallina.numrand-gallina.getFrame(t).getHeight());
+                gallina1.y = (gallina1.numrand-gallina1.getFrame(t).getHeight());
 
                 if (yMirilla < (0 -mirDer.getHeight()) || resetearMirillas) {
                     yMirilla = ardilla.getY();
                     resetearMirillas = false;
                 }
                 //Dibujar gallina
-                gallina.checkGallina(t, gc, gallina, ardilla.getHeight());
-                gallina1.checkGallina(t,gc, gallina1, ardilla.getHeight());
+                gallina.checkGallina(t, gc, gallina, ardilla.getHeight(), false);
+                gallina1.checkGallina(t,gc, gallina1, ardilla.getHeight(), true);
+
             }
         }.start();
 

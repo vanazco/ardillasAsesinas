@@ -6,6 +6,11 @@ import java.util.ArrayList;
 class Ardilla {
     private Image izq, der, centro;
     private double imgWidth, imgHeight, x, y;
+    int muni = 20;
+    int points = 0;
+    int vida = 3;
+    boolean restarMuni = false;
+
 
     double getWidth() {
         return imgWidth;
@@ -45,6 +50,12 @@ class Ardilla {
         else {
             gc.drawImage(centro, getX(), getY());
             return false;
+        }
+    }
+    void setMuni(int i){
+        muni -= i;
+        if (muni <= 0){
+            muni = 0;
         }
     }
 }
