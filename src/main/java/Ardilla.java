@@ -10,8 +10,6 @@ class Ardilla {
     int points = 0;
     int vida = 3;
 
-
-
     double getWidth() {
         return imgWidth;
     }
@@ -52,6 +50,7 @@ class Ardilla {
             return false;
         }
     }
+
     void setMuni(int i){
         muni -= i;
         if (muni <= 0){
