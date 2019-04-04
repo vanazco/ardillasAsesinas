@@ -1,12 +1,16 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Main extends Application {
@@ -61,6 +65,12 @@ public class Main extends Application {
         //Poner fondo
         Image fondo = new Image("fondo.jpg",800,600,false,false);
 
+        //Musica klk
+        String path = "src/main/resources/outro_song.mp3";
+        Media media = new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+
         theScene.setOnKeyPressed(
                 e -> {
                     String code = e.getCode().toString();
@@ -85,6 +95,9 @@ public class Main extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long l) {
+                //Que no pare la fiesta (dont stop the party)
+                mediaPlayer.setAutoPlay(true);
+
                 double t = (l - startNanoTime) / 1000000000.0;
                 gc.clearRect(0, 0, 800, 600);
                 //Dibujar fondo
@@ -127,6 +140,10 @@ public class Main extends Application {
                 //Dibujar gallina
                 gallina.checkGallina(t, gc, gallina, ardilla.getHeight(), false);
                 gallina1.checkGallina(t,gc, gallina1, ardilla.getHeight(), true);
+
+                if(gallina.x == 0 || gallina1.x == 800){
+                    ardilla.SetVida(ardilla);
+                }
 
             }
         }.start();
