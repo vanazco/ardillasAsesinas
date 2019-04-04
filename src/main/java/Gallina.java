@@ -1,6 +1,7 @@
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import javax.lang.model.type.IntersectionType;
 import java.util.Random;
 
 public class Gallina {
@@ -26,6 +27,17 @@ public class Gallina {
         gallina.duration = 0.100;
         return gallina;
     }
+
+    public void die(double t,GraphicsContext gc,Gallina gallina){
+        Image[] imageArray2 = new Image[1];
+        imageArray2[0] = new Image("u_dead.png");
+        gallina.frames = imageArray2;
+        gallina.duration = 0.100;
+        gc.drawImage(gallina.getFrame(t), x, y);
+    }
+
+
+
 
     public void checkGallina(double t, GraphicsContext gc, Gallina gallina, double imgHeight, boolean right) {
         if (right) {
@@ -57,5 +69,6 @@ public class Gallina {
                     Fgallina = false;
                 }
             }
+
         }
     }
