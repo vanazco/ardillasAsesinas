@@ -1,16 +1,12 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class Main extends Application {
@@ -84,6 +80,8 @@ public class Main extends Application {
                     input.remove(code);
                 });
 
+        Collisions collisions = new Collisions(input);
+
         new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -101,7 +99,19 @@ public class Main extends Application {
                 gc.drawImage(mirIzq, posicionMirIzq, yMirilla);
                 gc.drawImage(mirDer, posicionMirDer, yMirilla);
 
-                resetearMirillas = ardilla.setImage(input, gc);
+                if (ardilla.setImage(input, gc)) {
+                    resetearMirillas = true;
+                    if (collisions.checkCollisions(gallina, posicionMirIzq, posicionMirDer, yMirilla)) {
+                        gallina.die(t, gc, gallina);
+                        resetearMirillas = true;
+                        ardilla.points += 20;
+                    }
+                    if (collisions.checkCollisions(gallina1, posicionMirIzq, posicionMirDer, yMirilla)) {
+                        gallina1.die(t, gc, gallina1);
+                        resetearMirillas = true;
+                        ardilla.points += 20;
+                    }
+                }
 
                 yMirilla -= 0.8;
 
