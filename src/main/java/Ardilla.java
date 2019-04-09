@@ -8,7 +8,7 @@ class Ardilla {
     private double imgWidth, imgHeight, x, y;
     int muni = 20;
     int points = 0;
-    int vida = 10;
+    int vida = 2;
 
     double getWidth() {
         return imgWidth;
@@ -57,10 +57,14 @@ class Ardilla {
             muni = 0;
         }
     }
-    public void SetVida(Ardilla ardilla) {
+    void SetVida(Ardilla ardilla) {
         ardilla.vida --;
         if(ardilla.vida <= 0){
             ardilla.vida = 0;
         }
+    }
+
+    void addAmmo(int i) {
+        muni += i;
     }
 }

@@ -1,11 +1,15 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -20,7 +24,6 @@ public class Main extends Application {
     private int winHeight = 600;
     private Canvas canvas = new Canvas(winwWidth, winHeight);
     private boolean resetearMirillas;
-    private ArrayList<Gallina> gallinaList = new ArrayList<Gallina>();
 
     public static void main(String[] args)
     {
@@ -47,9 +50,6 @@ public class Main extends Application {
         //Gallinas
         Gallina gallina1 = Gallina.CreateGallina();
         Gallina gallina2 = Gallina.CreateGallina();
-
-        gallinaList.add(gallina1);
-        gallinaList.add(gallina2);
 
         Image mirIzq = new Image("mira160.png");
         Image mirDer = new Image("mira160.png");
@@ -96,6 +96,11 @@ public class Main extends Application {
 
         Collisions collisions = new Collisions(input);
 
+        Alert alert = new Alert(Alert.AlertType.NONE, "", ButtonType.OK);
+        Image image = new Image("tyobama.jpg");
+        ImageView imageView = new ImageView(image);
+        alert.setGraphic(imageView);
+
         new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -122,11 +127,13 @@ public class Main extends Application {
                         gallina1.die(t, gc, gallina1,false);
                         resetearMirillas = true;
                         ardilla.points += 20;
+                        ardilla.addAmmo(5);
                     }
                     if (collisions.checkCollisions(gallina2, posicionMirIzq, posicionMirDer, yMirilla)) {
                         gallina2.die(t, gc, gallina2,true);
                         resetearMirillas = true;
                         ardilla.points += 20;
+                        ardilla.addAmmo(5);
                     }
                 }
 
@@ -148,6 +155,14 @@ public class Main extends Application {
                 if(gallina1.x == 0 || gallina2.x == 800){
                     ardilla.SetVida(ardilla);
                 }
+
+                if (ardilla.vida <= 0) {
+                    //Se para el bucle de "animation timer"
+                    this.stop();
+                    alert.setOnHidden(evt -> Platform.exit());
+                    alert.show();
+                }
+
             }
         }.start();
 
