@@ -8,7 +8,7 @@ class Ardilla {
     private double imgWidth, imgHeight, x, y;
     int muni = 20;
     int points = 0;
-    int vida = 2;
+    int vida = 10;
 
     double getWidth() {
         return imgWidth;

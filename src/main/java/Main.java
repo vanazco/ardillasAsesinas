@@ -19,9 +19,11 @@ import java.util.ArrayList;
 
 public class Main extends Application {
     private final Info info = new Info();
-    private double yMirilla;
+    private double yMirilla, speedMirilla = 0.8;
     private int winwWidth = 800;
     private int winHeight = 600;
+    private int nivel = 0;
+    private int subirNivel = 10;
     private Canvas canvas = new Canvas(winwWidth, winHeight);
     private boolean resetearMirillas;
 
@@ -127,17 +129,17 @@ public class Main extends Application {
                         gallina1.die(t, gc, gallina1,false);
                         resetearMirillas = true;
                         ardilla.points += 20;
-                        ardilla.addAmmo(5);
+                        ardilla.addAmmo(3);
                     }
                     if (collisions.checkCollisions(gallina2, posicionMirIzq, posicionMirDer, yMirilla)) {
                         gallina2.die(t, gc, gallina2,true);
                         resetearMirillas = true;
                         ardilla.points += 20;
-                        ardilla.addAmmo(5);
+                        ardilla.addAmmo(3);
                     }
                 }
 
-                yMirilla -= 0.8;
+                yMirilla -= speedMirilla;
 
                 //Calcular la posicion de la gallina1 en la que sale
                 gallina1.y = (gallina1.numrand-gallina1.getFrame(t).getHeight());
@@ -154,6 +156,20 @@ public class Main extends Application {
 
                 if(gallina1.x == 0 || gallina2.x == 800){
                     ardilla.SetVida(ardilla);
+                }
+
+                if (ardilla.points == 20)
+                    subirNivel = ardilla.points * 2;
+
+                System.out.println(subirNivel);
+
+                if ( ardilla.points == subirNivel) {
+                    subirNivel = ardilla.points * 2;
+                    nivel++;
+                    gallina2.setSpeed(0.1);
+                    gallina1.setSpeed(0.1);
+                    speedMirilla += 0.1;
+                    info.setText(gc, "Nivel actual: ", nivel, winwWidth / 2.0, winHeight / 2);
                 }
 
                 if (ardilla.vida <= 0) {

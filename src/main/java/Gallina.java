@@ -9,8 +9,8 @@ public class Gallina {
     public double duration;
     boolean Fgallina = false;
     public double x, y,minrand,numrand;
-    Random r = new Random();
     public int winwWidth = 800;
+    public double speed = 0.5;
 
     public Image getFrame(double time)
     {
@@ -37,15 +37,16 @@ public class Gallina {
         gc.drawImage(gallina.getFrame(t), x, y);
     }
 
-
-
+    public void setSpeed(double speed) {
+        this.speed += speed;
+    }
 
     public void checkGallina(double t, GraphicsContext gc, Gallina gallina, double imgHeight, boolean right) {
         if (right) {
             if (!Fgallina) {
                 gc.drawImage(gallina.getFrame(t), x, y);
-                x += 0.5;
-                if (x > winwWidth) {
+                x += speed;
+                if (x >= winwWidth) {
                     Fgallina = true;
                     numrand =  (Math.random()*gallina.minrand- 60) + 60;
                 }
@@ -58,8 +59,8 @@ public class Gallina {
         } else {
             if (!Fgallina) {
                 gc.drawImage(gallina.getFrame(t), x, y);
-                x -= 0.5;
-                if (x < 0) {
+                x -= speed;
+                if (x <= 0) {
                     Fgallina = true;
                     numrand =  (Math.random()*gallina.minrand- 60) + 60;
                 }
