@@ -28,11 +28,12 @@ public class Gallina {
         return gallina;
     }
 
-    public void die(double t,GraphicsContext gc,Gallina gallina){
-        Image[] imageArray2 = new Image[1];
-        imageArray2[0] = new Image("u_dead.png");
-        gallina.frames = imageArray2;
-        gallina.duration = 0.100;
+    public void die(double t,GraphicsContext gc,Gallina gallina, boolean right){
+        if(right){
+            gallina.x = 0;
+        }else{
+            gallina.x = winwWidth;
+        }
         gc.drawImage(gallina.getFrame(t), x, y);
     }
 
@@ -69,6 +70,5 @@ public class Gallina {
                     Fgallina = false;
                 }
             }
-
         }
     }

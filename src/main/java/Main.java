@@ -20,6 +20,7 @@ public class Main extends Application {
     private int winHeight = 600;
     private Canvas canvas = new Canvas(winwWidth, winHeight);
     private boolean resetearMirillas;
+    private ArrayList<Gallina> gallinaList = new ArrayList<Gallina>();
 
     public static void main(String[] args)
     {
@@ -44,15 +45,18 @@ public class Main extends Application {
         final long startNanoTime = System.nanoTime();
 
         //Gallinas
-        Gallina gallina = Gallina.CreateGallina();
         Gallina gallina1 = Gallina.CreateGallina();
+        Gallina gallina2 = Gallina.CreateGallina();
+
+        gallinaList.add(gallina1);
+        gallinaList.add(gallina2);
 
         Image mirIzq = new Image("mira160.png");
         Image mirDer = new Image("mira160.png");
 
         //Min del rand para todas las gallinas
-        gallina.minrand = 600 - ardilla.getHeight();
         gallina1.minrand = 600 - ardilla.getHeight();
+        gallina2.minrand = 600 - ardilla.getHeight();
 
 
         double posicionMirIzq = (winwWidth / 2.0) - (mirIzq.getWidth() * 1.75);
@@ -114,13 +118,13 @@ public class Main extends Application {
 
                 if (ardilla.setImage(input, gc)) {
                     resetearMirillas = true;
-                    if (collisions.checkCollisions(gallina, posicionMirIzq, posicionMirDer, yMirilla)) {
-                        gallina.die(t, gc, gallina);
+                    if (collisions.checkCollisions(gallina1, posicionMirIzq, posicionMirDer, yMirilla)) {
+                        gallina1.die(t, gc, gallina1,false);
                         resetearMirillas = true;
                         ardilla.points += 20;
                     }
-                    if (collisions.checkCollisions(gallina1, posicionMirIzq, posicionMirDer, yMirilla)) {
-                        gallina1.die(t, gc, gallina1);
+                    if (collisions.checkCollisions(gallina2, posicionMirIzq, posicionMirDer, yMirilla)) {
+                        gallina2.die(t, gc, gallina2,true);
                         resetearMirillas = true;
                         ardilla.points += 20;
                     }
@@ -128,9 +132,9 @@ public class Main extends Application {
 
                 yMirilla -= 0.8;
 
-                //Calcular la posicion de la gallina en la que sale
-                gallina.y = (gallina.numrand-gallina.getFrame(t).getHeight());
+                //Calcular la posicion de la gallina1 en la que sale
                 gallina1.y = (gallina1.numrand-gallina1.getFrame(t).getHeight());
+                gallina2.y = (gallina2.numrand-gallina2.getFrame(t).getHeight());
 
                 if (yMirilla < (0 -mirDer.getHeight()) || resetearMirillas) {
                     yMirilla = ardilla.getY();
@@ -138,13 +142,12 @@ public class Main extends Application {
                 }
 
                 //Dibujar gallina
-                gallina.checkGallina(t, gc, gallina, ardilla.getHeight(), false);
-                gallina1.checkGallina(t,gc, gallina1, ardilla.getHeight(), true);
+                gallina1.checkGallina(t, gc, gallina1, ardilla.getHeight(), false);
+                gallina2.checkGallina(t,gc, gallina2, ardilla.getHeight(), true);
 
-                if(gallina.x == 0 || gallina1.x == 800){
+                if(gallina1.x == 0 || gallina2.x == 800){
                     ardilla.SetVida(ardilla);
                 }
-
             }
         }.start();
 
