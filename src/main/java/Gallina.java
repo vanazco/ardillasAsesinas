@@ -1,24 +1,20 @@
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import javax.lang.model.type.IntersectionType;
-import java.util.Random;
+class Gallina {
+    private Image[] frames;
+    private double duration;
+    private boolean Fgallina = false;
+    double x, y,minrand,numrand;
+    private int winwWidth = 800;
+    private double speed = 0.5;
 
-public class Gallina {
-    public Image[] frames;
-    public double duration;
-    boolean Fgallina = false;
-    public double x, y,minrand,numrand;
-    public int winwWidth = 800;
-    public double speed = 0.5;
-
-    public Image getFrame(double time)
-    {
+    Image getFrame(double time) {
         int index = (int)((time % (frames.length * duration)) / duration);
         return frames[index];
     }
 
-    public static Gallina CreateGallina() {
+    static Gallina CreateGallina() {
         Gallina gallina = new Gallina();
         Image[] imageArray = new Image[2];
         imageArray[0] = new Image("gallina_2.png");
@@ -28,7 +24,7 @@ public class Gallina {
         return gallina;
     }
 
-    public void die(double t,GraphicsContext gc,Gallina gallina, boolean right){
+    void die(double t, GraphicsContext gc, Gallina gallina, boolean right){
         if(right){
             gallina.x = 0;
             numrand = 76 + (Math.random() * ((minrand - 76) + 1));
@@ -39,11 +35,11 @@ public class Gallina {
         gc.drawImage(gallina.getFrame(t), x, y);
     }
 
-    public void setSpeed(double speed) {
+    void setSpeed(double speed) {
         this.speed += speed;
     }
 
-    public void checkGallina(double t, GraphicsContext gc, Gallina gallina, double imgHeight, boolean right) {
+    void checkGallina(double t, GraphicsContext gc, Gallina gallina, double imgHeight, boolean right) {
         if (right) {
             if (!Fgallina) {
                 gc.drawImage(gallina.getFrame(t), x, y);

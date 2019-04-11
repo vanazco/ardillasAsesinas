@@ -1,18 +1,14 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,21 +24,18 @@ public class Main extends Application {
     private boolean resetearMirillas;
     private static Stage primaryStage;
 
-    public static Stage getPrimaryStage() {
+    static Stage getPrimaryStage() {
         return primaryStage;
     }
 
-    public static void setPrimaryStage(Stage primaryStage) {
+    private static void setPrimaryStage(Stage primaryStage) {
         Main.primaryStage = primaryStage;
     }
-
-
 
     public static void main(String[] args)
     {
         launch(args);
     }
-
 
     @Override
     public void start(Stage stage) {
@@ -89,6 +82,9 @@ public class Main extends Application {
         Media media = new Media(new File(path).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
 
+        String michaelPath = "src/main/resources/michael-jackson-hee-hee.mp3";
+        Media mediaMichael = new Media(new File(michaelPath).toURI().toString());
+        MediaPlayer michael = new MediaPlayer(mediaMichael);
 
         theScene.setOnKeyPressed(
                 e -> {
@@ -119,6 +115,14 @@ public class Main extends Application {
             public void handle(long l) {
                 //Que no pare la fiesta (dont stop the party)
                 mediaPlayer.setAutoPlay(true);
+                mediaPlayer.setOnEndOfMedia(() -> {
+                    mediaPlayer.seek(Duration.ZERO);
+                    mediaPlayer.play();
+                });
+
+                if (input.contains("M") || input.contains("m")) {
+                    michael.setOnReady(michael::play);
+                }
 
                 double t = (l - startNanoTime) / 1000000000.0;
                 gc.clearRect(0, 0, 800, 600);
@@ -139,14 +143,12 @@ public class Main extends Application {
                     if (collisions.checkCollisions(gallina1, posicionMirIzq, posicionMirDer, yMirilla)) {
                         gallina1.die(t, gc, gallina1,false);
                         resetearMirillas = true;
-                        ardilla.points += 20;
-                        ardilla.addAmmo(3);
+                        ardilla.obtainBenefits();
                     }
                     if (collisions.checkCollisions(gallina2, posicionMirIzq, posicionMirDer, yMirilla)) {
                         gallina2.die(t, gc, gallina2,true);
                         resetearMirillas = true;
-                        ardilla.points += 20;
-                        ardilla.addAmmo(3);
+                        ardilla.obtainBenefits();
                     }
                 }
 

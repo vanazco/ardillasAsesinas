@@ -67,4 +67,11 @@ class Ardilla {
     void addAmmo(int i) {
         muni += i;
     }
+
+    void obtainBenefits() {
+        points += 20;
+        addAmmo(2);
+        if (points % 200 == 0)
+            vida += 1;
+    }
 }

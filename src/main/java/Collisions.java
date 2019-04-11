@@ -21,8 +21,7 @@ public class Collisions {
                 return true;
             else {
                 this.mirilla.setBounds((int) posicionMirDer, (int) yMirilla, 45, 45);
-                if (this.mirilla.intersects(this.gallina))
-                    return true;
+                return this.mirilla.intersects(this.gallina);
             }
         }
         return false;
