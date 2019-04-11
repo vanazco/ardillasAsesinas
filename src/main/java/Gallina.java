@@ -31,8 +31,10 @@ public class Gallina {
     public void die(double t,GraphicsContext gc,Gallina gallina, boolean right){
         if(right){
             gallina.x = 0;
+            numrand = 76 + (Math.random() * ((minrand - 76) + 1));
         }else{
             gallina.x = winwWidth;
+            numrand = 76 + (Math.random() * ((minrand - 76) + 1));
         }
         gc.drawImage(gallina.getFrame(t), x, y);
     }

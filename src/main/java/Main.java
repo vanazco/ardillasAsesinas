@@ -98,10 +98,8 @@ public class Main extends Application {
 
         Collisions collisions = new Collisions(input);
 
-        Alert alert = new Alert(Alert.AlertType.NONE, "", ButtonType.OK);
-        Image image = new Image("tyobama.jpg");
-        ImageView imageView = new ImageView(image);
-        alert.setGraphic(imageView);
+        //Ty obama
+
 
         new AnimationTimer() {
             @Override
@@ -154,14 +152,13 @@ public class Main extends Application {
                 gallina1.checkGallina(t, gc, gallina1, ardilla.getHeight(), false);
                 gallina2.checkGallina(t,gc, gallina2, ardilla.getHeight(), true);
 
-                if(gallina1.x == 0 || gallina2.x == 800){
+                if(gallina1.x <= 0 || gallina2.x >= 800){
                     ardilla.SetVida(ardilla);
                 }
 
                 if (ardilla.points == 20)
                     subirNivel = ardilla.points * 2;
 
-                System.out.println(subirNivel);
 
                 if ( ardilla.points == subirNivel) {
                     subirNivel = ardilla.points * 2;
@@ -175,8 +172,7 @@ public class Main extends Application {
                 if (ardilla.vida <= 0) {
                     //Se para el bucle de "animation timer"
                     this.stop();
-                    alert.setOnHidden(evt -> Platform.exit());
-                    alert.show();
+
                 }
 
             }
