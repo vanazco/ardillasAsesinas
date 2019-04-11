@@ -26,18 +26,31 @@ public class Main extends Application {
     private int subirNivel = 10;
     private Canvas canvas = new Canvas(winwWidth, winHeight);
     private boolean resetearMirillas;
+    private static Stage primaryStage;
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public static void setPrimaryStage(Stage primaryStage) {
+        Main.primaryStage = primaryStage;
+    }
+
+
 
     public static void main(String[] args)
     {
         launch(args);
     }
 
+
     @Override
     public void start(Stage stage) {
+        setPrimaryStage(stage);
         stage.setTitle( "Ez clap" );
 
         Group root = new Group();
-        Scene theScene = new Scene( root );
+        Scene theScene = new Scene( root,800,600 );
         stage.setScene( theScene );
 
         root.getChildren().add( canvas );
@@ -99,7 +112,7 @@ public class Main extends Application {
         Collisions collisions = new Collisions(input);
 
         //Ty obama
-
+        GameOver gameOver = new GameOver();
 
         new AnimationTimer() {
             @Override
@@ -172,7 +185,11 @@ public class Main extends Application {
                 if (ardilla.vida <= 0) {
                     //Se para el bucle de "animation timer"
                     this.stop();
-
+                    try {
+                        gameOver.start(stage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
